@@ -14,7 +14,7 @@ def get_published_pages(domain):
 
     headers = {
         'Content-type': 'application/json',
-        'User-agent': 'brettkelly.org'
+        'User-agent': 'brettkelly.org' # we can't use the requests UA because WPE rejects it
     }
     while True:
         response = requests.get(api_base, params=params, headers=headers)
