@@ -3,8 +3,8 @@
 import requests
 import sys
 
-def get_published_pages(domain):
-    api_base = f"http://{domain}/wp-json/wp/v2/pages"
+def get_published_pages(domain, cpt):
+    api_base = f"http://{domain}/wp-json/wp/v2/{cpt}"
     params = {
         'status': 'publish',
         'per_page': 100,
@@ -14,7 +14,7 @@ def get_published_pages(domain):
 
     headers = {
         'Content-type': 'application/json',
-        'User-agent': 'brettkelly.org' # we can't use the requests UA because WPE rejects it
+        'User-agent': 'brettkelly.org' # we can't use the requests UA because stupid WPE rejects it
     }
     while True:
         response = requests.get(api_base, params=params, headers=headers)
@@ -33,7 +33,15 @@ def get_published_pages(domain):
 
     return all_pages
 
-if(len(sys.argv) == 2):
-    published_pages = get_published_pages(sys.argv[1].strip())
+if(len(sys.argv) == 3):
+    domain = sys.argv[1].strip()
+    cpt = sys.argv[2].strip()
+    published_pages = get_published_pages(domain, cpt)
     for url in published_pages:
         print(url)
+else:
+    usage = """
+Usage:
+    poetry run python3 main.py domain.com cpt_slug
+"""
+    print(usage)
